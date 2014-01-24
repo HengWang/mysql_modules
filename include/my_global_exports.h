@@ -16,18 +16,38 @@
 
 #if defined(_WIN32)
 
-  #if defined(mysql_chassis_proxy_EXPORTS)
-    #define MY_API __declspec(dllexport)
+  #if defined(MY_GLOBAL_EXPORTS)
+    #define MY_GLOBAL_API __declspec(dllexport)
   #elif defined(MY_GLOBAL_COMPILE_STATIC)	 /* In test cases, define this to prevent linker warnings on Win32 */
-    #define MY_API 
+    #define MY_GLOBAL_API 
   #else
-    #define MY_API extern __declspec(dllimport)
+    #define MY_GLOBAL_API extern __declspec(dllimport)
   #endif
 
 #else
 
-  #define MY_API		extern
+  #define MY_GLOBAL_API		extern
 
 #endif
+
+/* Macros to make switching between C and C++ mode easier.*/
+#ifdef __cplusplus
+#define C_MODE_START    extern "C" {
+#define C_MODE_END	}
+#else
+#define C_MODE_START
+#define C_MODE_END
+#endif
+
+/* Define boolean logical constants */
+#ifndef HAS_BOOLEAN 
+typedef char bool
+#endif
+
+#ifndef TRUE
+#define TRUE		(1)	/* Logical true */
+#define FALSE		(0)	/* Logical false */
+#endif
+
 
 #endif  //__MY_GLOBAL_EXPORTS_H
